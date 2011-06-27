@@ -15,6 +15,9 @@ basic/test8
 basic/test9
 domount
 getopt
+general/large1.c
+general/large2.c
+general/large3.c
 lock/tlock64
 lock/tlocklfs
 special/bigfile

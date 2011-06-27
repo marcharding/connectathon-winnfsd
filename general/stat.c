@@ -52,7 +52,9 @@ getnewch:
 		exit(1);
 	}
 	c = i & 0x7f;
-	if (c == '\n' || c == '\r' || c == 'r')
+	if (c == ' ' || c == '\t')
+		goto getnewch;
+	else if (c == '\n' || c == '\r' || c == 'r')
 		attfmt = 1;
 	else if (isdigit(c))
 		fmt = "%lf %*s %lf %*s %lf %*s";	/* BSD fmt */

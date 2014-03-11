@@ -272,20 +272,24 @@ testexit(nok)
 	int nok;
 {
 
+	struct sigaction act;
 	close_testfile(DO_UNLINK);
 	if (nok) {
 		testreport(1);
 	}
 	if (who == PARENT) {
-		signal(SIGCLD, SIG_DFL);
+		act.sa_handler = SIG_DFL;
+		sigaction(SIGCLD, &act, NULL);
 		if (nok) {
-			signal(SIGINT, SIG_IGN);
+			act.sa_handler = SIG_IGN;
+			sigaction(SIGINT, &act, NULL);
 			kill(childpid, SIGINT);
 		}
 		wait((int *)0);
 	} else {
 		if (nok) {
-			signal(SIGINT, SIG_IGN);
+			act.sa_handler = SIG_IGN;
+			sigaction(SIGINT, &act, NULL);
 			kill(parentpid, SIGINT);
 		}
 	}
@@ -1450,7 +1454,9 @@ test12()
 			close_testfile(DO_UNLINK);
 		} else {
 			/* subchild */
-			signal(SIGINT, SIG_DFL);
+			struct sigaction act;
+			act.sa_handler = SIG_DFL;
+			sigaction(SIGINT, &act, NULL);
 			test(12, 0, F_TLOCK, (off_t)0, (off_t)0, PASS, FATAL);
 			for (;;)
 				sleep(1);
@@ -1667,13 +1673,19 @@ main(argc, argv)
 	/*
 	 * Fork child...
 	 */
+	struct sigaction act; 
+	act.sa_handler = SIG_DFL;
 	if ((childpid = fork()) == 0) {
 		who = CHILD;
-		signal(SIGINT, parentsig);
+		sigaction(SIGINT, &act, NULL);
+		act.sa_handler = parentsig;
+		sigaction(SIGINT, &act, NULL);
 	} else {
 		who = PARENT;
-		signal(SIGINT, childsig);
-		signal(SIGCLD, childdied);
+		act.sa_handler = childsig;
+		sigaction(SIGINT, &act, NULL);
+		act.sa_handler = childdied;
+		sigaction(SIGCLD, &act, NULL);
 	}
 
 	/*
@@ -1692,7 +1704,9 @@ main(argc, argv)
 	if (who == CHILD) {
 		childwait();
 	} else {
-		signal(SIGCLD, SIG_DFL);
+		struct sigaction;
+		act.sa_handler = SIG_DFL;
+		sigaction(SIGCLD, &act, NULL);
 		childfree(0);
 	}
 	testexit(0);

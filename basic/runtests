@@ -59,7 +59,7 @@ echo ""
 
 # Rename and Link test
 echo ""
-if [ "$HARDLINKS"o != no ]
+if [ "$HARDLINKS" != no ]
 then
 	./test7 $TESTARG
 else

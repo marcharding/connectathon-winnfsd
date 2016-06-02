@@ -65,9 +65,11 @@ echo ""
 echo "test truncate"
 ./truncate
 
-echo ""
-echo "test holey file support"
-./holey
+if [ "$WINNFSD" != yes ]; then
+	echo ""
+	echo "test holey file support"
+	./holey
+fi
 
 if [ "$HARDLINKS"o != no -a "$CIFS" != "yes" ]
 then
@@ -98,13 +100,15 @@ echo "write/read" $size "MB file"
 
 echo ""
 echo "write/read at 2GB, 4GB edges"
-if [ "$CIFS" != "yes" ] && echo $MNTOPTIONS | grep vers=2 > /dev/null
-then
-	echo "skipping test; not supported with v2"
-else
-	./bigfile2 bigfile$$
-fi
 
+if [ "$GB2" != yes ]; then
+	if [ "$CIFS" != "yes" ] && echo $MNTOPTIONS | grep vers=2 > /dev/null
+	then
+		echo "skipping test; not supported with v2"
+	else
+		./bigfile2 bigfile$$
+	fi
+fi
 echo ""
 echo "Special tests complete"
 

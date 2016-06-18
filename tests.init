@@ -98,7 +98,7 @@ PATH=/bin:/usr/bin:/usr/ucb:/usr/ccs/bin:/sbin:/usr/sbin:.
 #PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/X11R6/bin:.
 
 SERVER=""
-SERVPATH="C:\connectathon-winnfsd"
+SERVPATH="/C/connectathon-winnfsd"
 TEST="-a"
 TESTARG="-t"
 
